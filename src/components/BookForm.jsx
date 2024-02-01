@@ -9,8 +9,23 @@ function BookForm({ url }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [error, setError] = useState(null);
+  const [enabled, setEnabled] = useState(false);
 
   const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+  const handleChangeTitle = (e) => {
+    setTitle(e.target.value);
+    if (title.length > 500) {
+      setError('Book Title cannot exceed 500 characters');
+    } else {
+      setError(false);
+    }
+    setEnabled(title != null && author != null && title.length >= 1 && author.length > 1 && !error);
+  };
+  const handleChangeAuthor = (e) => {
+    setAuthor(e.target.value);
+    setEnabled(title != null && author != null && title.length >= 1 && author.length > 1 && !error);
+    setError(author.length > 200 ? 'Book Author cannot exceed 200 characters' : false);
+  };
   const handleAddBook = (e) => {
     e.preventDefault();
     if (author && title) {
@@ -82,7 +97,7 @@ function BookForm({ url }) {
                   type="text"
                   id="title"
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => handleChangeTitle(e)}
                   aria-labelledby="title-label"
                   placeholder="Book title"
                   required
@@ -96,7 +111,7 @@ function BookForm({ url }) {
                   type="text"
                   id="author"
                   value={author}
-                  onChange={(e) => setAuthor(e.target.value)}
+                  onChange={(e) => handleChangeAuthor(e)}
                   aria-labelledby="author-label"
                   placeholder="Book Author"
                   required
@@ -104,7 +119,7 @@ function BookForm({ url }) {
               </label>
             </div>
             <div className="col-12 col-sm-12 col-md-3 col-lg-2">
-              <button type="submit" className="btn add-btn">Add Book</button>
+              <button type="submit" className="btn add-btn" disabled={!enabled}>Add Book</button>
             </div>
           </form>
           {error && <div className="error-message">{error}</div>}
