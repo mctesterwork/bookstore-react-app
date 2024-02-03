@@ -14,7 +14,7 @@ function BookForm({ url }) {
   const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
   const handleChangeTitle = (e) => {
     setTitle(e.target.value);
-    if (title.length > 500) {
+    if (title.length >= 501) {
       setError('Book Title cannot exceed 500 characters');
     } else {
       setError(false);
@@ -24,7 +24,7 @@ function BookForm({ url }) {
   const handleChangeAuthor = (e) => {
     setAuthor(e.target.value);
     setEnabled(title != null && author != null && title.length >= 1 && author.length > 1 && !error);
-    setError(author.length > 200 ? 'Book Author cannot exceed 200 characters' : false);
+    setError(author.length >= 201 ? 'Book Author cannot exceed 200 characters' : false);
   };
   const handleAddBook = (e) => {
     e.preventDefault();
